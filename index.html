@@ -81,6 +81,7 @@
         <div><dt>Visuals</dt><dd>Resolume Arena over OSC</dd></div>
         <div><dt>Lighting</dt><dd>MyDMX 3 over MIDI</dd></div>
         <div><dt>Control</dt><dd>Bitfocus Companion</dd></div>
+        <div><dt>By</dt><dd>rtfx design</dd></div>
         <div><dt>Role</dt><dd>System design, integration, button art, documentation</dd></div>
       </dl>
     </div>
@@ -393,18 +394,59 @@
 
   <!-- ------------------------------------------------------------ handover -->
   <section class="band band--end" id="handover" aria-labelledby="h-handover">
-    <div class="wrap wrap--narrow">
+    <div class="wrap">
       <h2 id="h-handover">Handed over, not just installed</h2>
-      <p class="big">
-        The build shipped with a written technical reference: signal flow, the
-        authoritative MIDI map, the Companion structure, and the conventions any
-        future scene has to follow.
-      </p>
-      <p>
-        A show control system that only its builder understands is a liability. The
-        documentation is the part that makes it an asset — it is what lets someone
-        else add a lighting scene in a year without quietly breaking the blackouts.
-      </p>
+
+      <div class="handover">
+        <div class="handover__text">
+          <p class="big">
+            The build shipped with two documents: a technical reference for whoever
+            maintains it, and a one-page quick guide for whoever teaches the class.
+          </p>
+          <p>
+            A show control system that only its builder understands is a liability.
+            The documentation is what makes it an asset — it is what lets someone
+            else add a lighting scene in a year without quietly breaking the
+            blackouts, and what lets a new instructor run the room on their first
+            morning.
+          </p>
+          <p>
+            The instructor guide never mentions Resolume, MyDMX, MIDI or OSC. It
+            describes fifteen buttons and three rules, and nothing else.
+          </p>
+
+          <ul class="tenets">
+            <li><strong>Green outline = live.</strong> That button or state is currently active.</li>
+            <li><strong>One press = one action.</strong> No holds, no double-taps, no hidden functions.</li>
+            <li><strong>One phase at a time.</strong> Warm Up, Build and Peak are exclusive — the last one pressed wins.</li>
+          </ul>
+
+          <p class="handover__cta">
+            <a class="btn btn--primary" href="docs/REVd-Instructor-Quick-Guide.pdf" target="_blank" rel="noopener">
+              Open the instructor guide
+              <span class="btn__meta">PDF · 1 page · 20 KB</span>
+            </a>
+          </p>
+        </div>
+
+        <figure class="docpreview">
+          <a class="doccard" href="docs/REVd-Instructor-Quick-Guide.pdf" target="_blank" rel="noopener">
+            <span class="doccard__kind">PDF</span>
+            <span class="doccard__title">Instructor<br>Quick Guide</span>
+            <span class="doccard__rule" aria-hidden="true"></span>
+            <span class="doccard__lines" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </span>
+            <span class="doccard__meta">1 page · dark screen version · 20 KB</span>
+            <span class="doccard__go">Open<svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+          <figcaption>
+            <cite>REVd Cycling — Instructor Quick Guide</cite>. Panel layout, then
+            what each button does, on a single page. It is the only document an
+            instructor ever needs to read.
+          </figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 </main>
@@ -412,7 +454,7 @@
 <footer class="pagefoot">
   <div class="wrap">
     <p class="pagefoot__mark">REVd</p>
-    <p>Show control system design, integration and documentation.</p>
+    <p>Show control system design, integration and documentation by <strong>rtfx design</strong>.</p>
     <p class="pagefoot__note">Case study · <time datetime="2026-08">August 2026</time></p>
   </div>
 </footer>

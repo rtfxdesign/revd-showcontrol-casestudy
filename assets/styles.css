@@ -518,6 +518,140 @@ figcaption {
 }
 .rules p { color: var(--text-dim); font-size: .9375rem; margin: 0; }
 
+/* ----------------------------------------------------------- handover --- */
+
+.handover {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+  margin-block-start: 2rem;
+}
+.handover__text > p:not(.big) { color: var(--text-dim); max-inline-size: 56ch; }
+
+.tenets {
+  list-style: none;
+  margin: 1.75rem 0;
+  padding: 0;
+  display: grid;
+  gap: .6rem;
+  max-inline-size: 56ch;
+}
+.tenets li {
+  padding: .7rem .95rem;
+  border: 1px solid var(--line);
+  border-inline-start: 3px solid var(--green);
+  border-radius: var(--radius);
+  background: var(--ink-3);
+  font-size: .9375rem;
+  color: var(--text-dim);
+}
+.tenets strong { color: var(--text); }
+
+.handover__cta { margin-block-start: 1.75rem; }
+
+.btn__meta {
+  display: block;
+  font-size: .75rem;
+  font-weight: 550;
+  opacity: .8;
+  letter-spacing: .02em;
+}
+
+.docpreview { margin: 0; }
+
+/* A designed stand-in for the document, not a render of it: browsers disagree
+   too much about inline PDF embedding to make that the load-bearing element. */
+.doccard {
+  display: grid;
+  align-content: start;
+  gap: 0;
+  aspect-ratio: 612 / 792;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(90% 60% at 50% 0%, #1a0a12 0%, transparent 70%),
+    var(--ink-3);
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s, transform .2s, background .2s;
+}
+.doccard:hover {
+  color: var(--text);
+  border-color: var(--red);
+  transform: translateY(-2px);
+}
+
+.doccard__kind {
+  justify-self: start;
+  font-family: var(--mono);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  color: var(--red);
+  border: 1px solid color-mix(in srgb, var(--red) 40%, transparent);
+  background: var(--red-soft);
+  border-radius: 5px;
+  padding: .15rem .5rem;
+  margin-block-end: 1.5rem;
+}
+.doccard__title {
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem);
+  font-weight: 750;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+}
+.doccard__rule {
+  inline-size: 3rem;
+  block-size: 3px;
+  background: var(--red);
+  border-radius: 2px;
+  margin-block: 1.25rem;
+}
+.doccard__lines { display: grid; gap: .55rem; }
+.doccard__lines > span {
+  block-size: 7px;
+  border-radius: 3px;
+  background: var(--line-2);
+}
+.doccard__lines > span:nth-child(1) { inline-size: 92%; }
+.doccard__lines > span:nth-child(2) { inline-size: 78%; }
+.doccard__lines > span:nth-child(3) { inline-size: 85%; }
+.doccard__lines > span:nth-child(4) { inline-size: 60%; background: var(--line); }
+.doccard__lines > span:nth-child(5) { inline-size: 74%; background: var(--line); }
+.doccard__lines > span:nth-child(6) { inline-size: 48%; background: var(--line); }
+
+.doccard__meta {
+  position: absolute;
+  inset-block-end: clamp(1.25rem, 3vw, 2rem);
+  inset-inline-start: clamp(1.25rem, 3vw, 2rem);
+  font-size: .75rem;
+  color: var(--text-faint);
+}
+.doccard__go {
+  position: absolute;
+  inset-block-start: clamp(1.25rem, 3vw, 2rem);
+  inset-inline-end: clamp(1.25rem, 3vw, 2rem);
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .8125rem;
+  font-weight: 650;
+  color: var(--text-faint);
+  transition: color .2s;
+}
+.doccard:hover .doccard__go { color: var(--red-text); }
+.docpreview figcaption { margin-block-start: .85rem; }
+.docpreview cite { font-style: normal; color: var(--text-dim); }
+
+@media (max-width: 54rem) {
+  .handover { grid-template-columns: minmax(0, 1fr); }
+  .docpreview { max-inline-size: 26rem; }
+}
+
 /* ------------------------------------------------------------- footer --- */
 
 .pagefoot {

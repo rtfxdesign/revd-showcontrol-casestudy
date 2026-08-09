@@ -16,6 +16,7 @@ No build step, no dependencies.
 | `assets/styles.css` | Design tokens, layout, print stylesheet |
 | `assets/app.js` | Progressive enhancement only |
 | `media/` | Web-encoded video and stills |
+| `docs/` | The instructor quick guide, shipped as the original PDF |
 
 `app.js` adds: hero play/pause, click-to-play gallery clips (which pause
 themselves when scrolled off-screen), a `<dialog>` lightbox, and scroll
@@ -57,8 +58,13 @@ npx -y netlify-cli deploy --prod
 - Deliberately excludes everything operational: no IP addresses, device
   serials, RustDesk credentials, or file paths. Those live only in the private
   technical-reference repo.
-- `media/room-mirror.webp` shows an identifiable person in a mirror. Swap it if
-  that isn't wanted publicly.
-- The prose is a first draft written from the technical reference. Claims about
-  scope and role (`Role: system design, integration, button art, documentation`)
-  should be checked before this is shown to anyone.
+- Credited to **rtfx design**.
+- The instructor guide is linked from a designed document card rather than an
+  inline PDF embed. `<iframe>`/`<object>` PDF rendering varies too much across
+  browsers to be the load-bearing element — the card always renders, and the
+  real PDF is one click away. To show a rendered page image instead, install
+  poppler (`winget install oschwartz10612.Poppler`) and use
+  `pdftoppm -png -r 150 -f 1 -l 1` to make the thumbnail.
+- The prose is a first draft written from the technical reference and the
+  instructor guide. Claims about scope and role should be checked before this
+  is shown to anyone.
