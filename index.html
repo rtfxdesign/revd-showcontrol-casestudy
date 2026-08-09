@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Show control system design for REVd Cycling — one Stream Deck per room driving an LED wall and DMX lighting, so instructors never touch software.">
+<meta name="color-scheme" content="dark">
+<title>REVd Cycling — Show Control System | Case Study</title>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="REVd Cycling — Show Control System">
+<meta property="og:description" content="One Stream Deck per room drives the LED wall and the lighting rig. Instructors press labelled buttons; no application window is ever touched.">
+<meta property="og:image" content="media/wall-phases.webp">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e11d48'/%3E%3Cpath d='M9 23V9h7.4c2.7 0 4.4 1.6 4.4 4 0 1.9-1 3.2-2.8 3.7L21.6 23h-3.5l-3.2-5.8h-2.4V23H9zm3.5-8.4h3.3c1.2 0 1.9-.6 1.9-1.6s-.7-1.6-1.9-1.6h-3.3v3.2z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preload" as="image" href="media/hero.webp" fetchpriority="high">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="hero">
+  <video class="hero__video" poster="media/hero.webp"
+         autoplay muted loop playsinline disablepictureinpicture
+         aria-hidden="true" tabindex="-1" width="1280" height="720">
+    <source src="media/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero__veil" aria-hidden="true"></div>
+
+  <div class="hero__body">
+    <p class="eyebrow">Show control · Systems design · 2026</p>
+    <h1>The instructor never<br>touches&nbsp;software.</h1>
+    <p class="hero__lede">
+      A boutique cycling studio wanted a room that reacts — LED wall, moving light,
+      strobes, all shifting with the class. What it could not have was an instructor
+      crouched over a laptop mid-ride. So the whole system collapses into fifteen
+      labelled buttons.
+    </p>
+    <p class="hero__cta">
+      <a class="btn btn--primary" href="#system">See how it works</a>
+      <a class="btn" href="#room">Watch the room</a>
+    </p>
+  </div>
+
+  <button type="button" class="hero__mute" id="hero-mute" hidden>
+    <span class="visually-hidden">Pause background video</span>
+    <svg class="icon-pause" aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><rect x="7" y="6" width="3.5" height="12" rx="1"/><rect x="13.5" y="6" width="3.5" height="12" rx="1"/></svg>
+    <svg class="icon-play" aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path d="M8 5.5v13l11-6.5z"/></svg>
+  </button>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ------------------------------------------------------------ brief -->
+  <section class="band band--brief" id="brief" aria-labelledby="h-brief">
+    <div class="wrap grid-brief">
+      <div>
+        <h2 id="h-brief">The brief</h2>
+        <p class="big">
+          Two rooms. One studio PC. A wraparound LED wall, a DMX rig, and a
+          class schedule that never pauses for a technical problem.
+        </p>
+        <p>
+          The studio already owned good equipment — Resolume Arena driving the wall,
+          MyDMX 3 driving the fixtures. The problem was never capability. It was that
+          running a class meant alt-tabbing between two professional VJ applications
+          while pedalling, and nobody was going to do that at 6am.
+        </p>
+        <p>
+          The system I built puts a Stream Deck in each room and hides everything else.
+          Visuals travel over OSC. Lighting travels over MIDI through a virtual cable.
+          The two paths are deliberately independent, so a failure in one leaves the
+          other running — and the room stays usable while it gets fixed.
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div><dt>Rooms</dt><dd>Cycle · Reformer</dd></div>
+        <div><dt>Surfaces</dt><dd>2 × Stream Deck, 5×3</dd></div>
+        <div><dt>Visuals</dt><dd>Resolume Arena over OSC</dd></div>
+        <div><dt>Lighting</dt><dd>MyDMX 3 over MIDI</dd></div>
+        <div><dt>Control</dt><dd>Bitfocus Companion</dd></div>
+        <div><dt>Role</dt><dd>System design, integration, button art, documentation</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ----------------------------------------------------------- numbers -->
+  <section class="band band--tight" aria-label="Project at a glance">
+    <ul class="wrap stats">
+      <li><span class="stat__n">15</span><span class="stat__l">buttons per room</span></li>
+      <li><span class="stat__n">13</span><span class="stat__l">Resolume layers</span></li>
+      <li><span class="stat__n">22</span><span class="stat__l">state variables</span></li>
+      <li><span class="stat__n">0</span><span class="stat__l">windows touched</span></li>
+    </ul>
+  </section>
+
+  <!-- ------------------------------------------------------------ system -->
+  <section class="band" id="system" aria-labelledby="h-system">
+    <div class="wrap">
+      <h2 id="h-system">One press, one action</h2>
+      <p class="measure">
+        Every button does exactly one thing, and its face says what that thing is.
+        No holds, no double-taps, no hidden modes. The single exception is
+        <strong>Blackout All</strong>, which toggles — because the one moment you
+        need to kill the room, you also need to bring it back.
+      </p>
+
+      <figure class="shot shot--wide">
+        <button type="button" class="zoom" data-zoom="media/deck-icons.webp"
+                data-caption="The live run page. Every icon was drawn for this system; the green outline is driven by Companion state, so it can never disagree with the room.">
+          <img src="media/deck-icons.webp" alt="A five by three grid of custom Stream Deck button faces: Blackout All, Lights Red, Podium Mid, REVd, Warm Up, Blackout Lights, Lights Strobe, Podium Blackout, BPM half, Build, Blackout Wall, Red Strobe, BPM double and Peak."
+               loading="lazy" width="1600" height="936">
+          <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+        </button>
+        <figcaption>
+          The live run page. Every icon was drawn for this system — phase, tempo,
+          podium, wash, blackout — so the surface reads at a glance in a dark room.
+        </figcaption>
+      </figure>
+
+      <div class="split">
+        <figure class="shot">
+          <button type="button" class="zoom" data-zoom="media/deck-main.webp"
+                  data-caption="Green outline means that state is live. Companion holds the state itself rather than polling Resolume or MyDMX.">
+            <img src="media/deck-main.webp" alt="The same button grid with two buttons outlined in green, indicating the REVd overlay and the red wash are currently live." loading="lazy" width="1600" height="989">
+            <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+          </button>
+          <figcaption>Green outline = that state is live, on every button, always.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button type="button" class="zoom" data-zoom="media/deck-instructor.webp"
+                  data-caption="The instructor setup page. Built and functional, but deliberately unreachable from the room deck in version one.">
+            <img src="media/deck-instructor.webp" alt="A Companion page named INSTRUCTOR showing REVd, Lights Red, LED Wall, Text, Start Class, Home and Reset All buttons." loading="lazy" width="1184" height="592">
+            <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+          </button>
+          <figcaption>The setup page — built, tested, and intentionally locked away.</figcaption>
+        </figure>
+      </div>
+
+      <div class="note">
+        <h3>The interesting constraint</h3>
+        <p>
+          Every setup screen exists and works. The room deck simply cannot navigate to
+          it — surface groups restrict each deck to a single page. Opening the full
+          instructor workflow later is a configuration change, not new construction.
+          Shipping less than was built is what made version one safe to hand over.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- -------------------------------------------------------------- room -->
+  <section class="band band--dark" id="room" aria-labelledby="h-room">
+    <div class="wrap">
+      <h2 id="h-room">The room, running</h2>
+      <p class="measure">
+        Three phases — Warm Up, Build, Peak — each a source and mask pair on the wall,
+        each clearing every other phase as it fires. Nothing can bleed between them,
+        and no phase can be half-live.
+      </p>
+
+      <div class="reel">
+        <figure class="clip clip--tall">
+          <video src="media/wall-phases.mp4" poster="media/wall-phases.webp"
+                 muted loop playsinline preload="none" width="506" height="900"></video>
+          <button type="button" class="clip__play" data-play>
+            <span class="visually-hidden">Play clip: the wall running a peak-phase scene</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <figcaption>Peak phase — the wall wraps the room, the wash tracks it.</figcaption>
+        </figure>
+
+        <figure class="clip clip--tall">
+          <video src="media/milestone-overlay.mp4" poster="media/milestone-overlay.webp"
+                 muted loop playsinline preload="none" width="506" height="900"></video>
+          <button type="button" class="clip__play" data-play>
+            <span class="visually-hidden">Play clip: a milestone overlay reading Congrats Group 1</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <figcaption>Milestone overlay — a dedicated text layer, picked from a sub-page.</figcaption>
+        </figure>
+
+        <figure class="clip">
+          <video src="media/deck-press.mp4" poster="media/deck-press.webp"
+                 muted loop playsinline preload="none" width="1280" height="720"></video>
+          <button type="button" class="clip__play" data-play>
+            <span class="visually-hidden">Play clip: a hand pressing the Stream Deck as the room changes colour</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <figcaption>The entire interface, mid-class.</figcaption>
+        </figure>
+
+        <figure class="clip">
+          <video src="media/room-wide.mp4" poster="media/room-wide.webp"
+                 muted loop playsinline preload="none" width="1280" height="720"></video>
+          <button type="button" class="clip__play" data-play>
+            <span class="visually-hidden">Play clip: wide view of the cycle room under red wash</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <figcaption>Cycle room, red wash, wall live.</figcaption>
+        </figure>
+
+        <figure class="clip">
+          <video src="media/wall-minimal.mp4" poster="media/wall-minimal.webp"
+                 muted loop playsinline preload="none" width="1280" height="720"></video>
+          <button type="button" class="clip__play" data-play>
+            <span class="visually-hidden">Play clip: a minimal blue arc scene on the wall</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <figcaption>Black is the resting state — no effect may lift the black level.</figcaption>
+        </figure>
+
+        <figure class="clip">
+          <video src="media/podium-red.mp4" poster="media/podium-red.webp"
+                 muted loop playsinline preload="none" width="1280" height="720"></video>
+          <button type="button" class="clip__play" data-play>
+            <span class="visually-hidden">Play clip: podium fixture in red</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </button>
+          <figcaption>Podium is its own zone — wash changes never disturb it.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="shot shot--wide">
+        <button type="button" class="zoom" data-zoom="media/room-mirror.webp"
+                data-caption="The Cycle room between classes.">
+          <img src="media/room-mirror.webp" alt="Wide view of the cycle studio: a large LED wall showing blue and magenta graphics behind rows of spin bikes, reflected in a mirrored wall." loading="lazy" width="1800" height="3200">
+          <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+        </button>
+        <figcaption>Between classes, wall idling.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------- flow -->
+  <section class="band" id="flow" aria-labelledby="h-flow">
+    <div class="wrap">
+      <h2 id="h-flow">Two paths that don't need each other</h2>
+      <p class="measure">
+        This separation is the load-bearing decision in the whole build. Visuals and
+        lighting never share a transport. When something breaks, the half that still
+        works tells you where to look.
+      </p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 740 470" role="img" aria-labelledby="flow-title flow-desc" class="flowsvg">
+          <title id="flow-title">Signal flow diagram</title>
+          <desc id="flow-desc">A Stream Deck connects over the network to Bitfocus Companion on the studio PC. Companion splits into two independent paths. On the left, OSC on port 7000 goes to Resolume Arena, which drives the LED wall. On the right, a MIDI note on message goes through the loopMIDI virtual port to MyDMX 3, which drives DMX universe one — the Tetra fixtures, neon and LED strip.</desc>
+
+          <g class="fl-edge">
+            <path d="M138 92 H 242"/>
+            <path d="M355 116 V 160"/>
+            <path d="M232 160 H 600"/>
+            <path d="M232 160 V 186"/>
+            <path d="M600 160 V 186"/>
+            <path d="M232 250 V 366"/>
+            <path d="M600 250 V 276"/>
+            <path d="M600 340 V 366"/>
+          </g>
+
+          <g class="fl-arrow">
+            <path d="M242 86 l10 6 -10 6 z"/>
+            <path d="M226 186 l6 10 6 -10 z"/>
+            <path d="M594 186 l6 10 6 -10 z"/>
+            <path d="M594 276 l6 10 6 -10 z"/>
+            <path d="M226 366 l6 10 6 -10 z"/>
+            <path d="M594 366 l6 10 6 -10 z"/>
+          </g>
+
+          <g class="fl-node fl-node--in">
+            <rect x="20" y="66" width="118" height="52" rx="9"/>
+            <text x="79" y="88">Stream Deck</text>
+            <text x="79" y="105" class="fl-sub">per room</text>
+          </g>
+
+          <g class="fl-node fl-node--hub">
+            <rect x="250" y="60" width="210" height="56" rx="9"/>
+            <text x="355" y="84">Bitfocus Companion</text>
+            <text x="355" y="102" class="fl-sub">state · feedback · paging</text>
+          </g>
+
+          <g class="fl-node">
+            <rect x="160" y="196" width="144" height="54" rx="9"/>
+            <text x="232" y="220">Resolume Arena</text>
+            <text x="232" y="237" class="fl-sub">composition</text>
+          </g>
+
+          <g class="fl-node">
+            <rect x="528" y="196" width="144" height="54" rx="9"/>
+            <text x="600" y="220">loopMIDI</text>
+            <text x="600" y="237" class="fl-sub">virtual port</text>
+          </g>
+
+          <g class="fl-node">
+            <rect x="528" y="286" width="144" height="54" rx="9"/>
+            <text x="600" y="310">MyDMX 3</text>
+            <text x="600" y="327" class="fl-sub">showfile</text>
+          </g>
+
+          <g class="fl-node fl-node--out">
+            <rect x="160" y="376" width="144" height="52" rx="9"/>
+            <text x="232" y="398">LED wall</text>
+            <text x="232" y="415" class="fl-sub">the room's surface</text>
+          </g>
+
+          <g class="fl-node fl-node--out">
+            <rect x="510" y="376" width="180" height="52" rx="9"/>
+            <text x="600" y="398">DMX universe 1</text>
+            <text x="600" y="415" class="fl-sub">tetra · neon · strip</text>
+          </g>
+
+          <g class="fl-tag">
+            <text x="295" y="152">OSC :7000</text>
+            <text x="478" y="152">MIDI note on</text>
+          </g>
+        </svg>
+        <figcaption>
+          Companion holds all state itself rather than reading it back — which is why
+          the button outlines can be trusted even when the applications behind them
+          are minimised and forgotten.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- --------------------------------------------------------- internals -->
+  <section class="band band--dark" id="internals" aria-labelledby="h-internals">
+    <div class="wrap">
+      <h2 id="h-internals">Behind the glass</h2>
+      <p class="measure">
+        Under the surface it is ordinary professional tooling, wired so that nobody has
+        to look at it. Scenes live in MyDMX with their own fade times; Companion only
+        ever sends a trigger.
+      </p>
+
+      <div class="split">
+        <figure class="shot">
+          <button type="button" class="zoom" data-zoom="media/rack.webp"
+                  data-caption="The rack: DMX interface, network, wireless for both rooms, power conditioning.">
+            <img src="media/rack.webp" alt="An equipment rack containing a myDMX interface, network switches, wireless receivers labelled Cycle and Reformer, a power conditioner and an audio mixer." loading="lazy" width="1800" height="2400">
+            <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+          </button>
+          <figcaption>One rack, two rooms, one studio PC.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button type="button" class="zoom" data-zoom="media/mydmx-midi.webp"
+                  data-caption="Every lighting scene is triggered by a Note On, channel 1, velocity 127. No note-offs, no held notes.">
+            <img src="media/mydmx-midi.webp" alt="A MyDMX dialog titled MIDI Triggering for Cycle Wash Red, set to Note On, channel 1, number 60, on value 127." loading="lazy" width="632" height="514">
+            <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+          </button>
+          <figcaption>One convention, applied without exception: Note On, ch 1, vel 127.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="shot shot--wide">
+        <button type="button" class="zoom" data-zoom="media/mydmx-shortcuts.webp"
+                data-caption="The scene list. Names are banked by zone so a new scene can never land in the wrong room.">
+          <img src="media/mydmx-shortcuts.webp" alt="A MyDMX shortcuts preference pane listing scenes: Cycle Wash Red, Cycle Wash Magenta, Cycle Wash Strobe, Cycle Blackout, Reformer Red, Reformer Magenta, Reformer Strobe, Reformer Blackout, Podium On and Podium Off, each bound to a MIDI port." loading="lazy" width="1700" height="1295">
+          <span class="zoom__hint" aria-hidden="true">Enlarge</span>
+        </button>
+        <figcaption>
+          Scenes are banked by zone — Cycle wash, Reformer, podium, strip — so the
+          three lighting zones stay permanently independent. No scene spans them.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- -------------------------------------------------------- principles -->
+  <section class="band" id="principles" aria-labelledby="h-principles">
+    <div class="wrap">
+      <h2 id="h-principles">Rules the system has to keep</h2>
+      <p class="measure">
+        These were written down before the build and checked after every change. They
+        are the difference between a room that works and a room that mostly works.
+      </p>
+
+      <ol class="rules">
+        <li><h3>Instructors never see software</h3><p>No workflow may require a window, a mouse, or a decision about Resolume.</p></li>
+        <li><h3>One press, one action</h3><p>No holds, no double-taps, no hidden functions.</p></li>
+        <li><h3>The green outline is always true</h3><p>Every state change updates every sibling, in the same action list.</p></li>
+        <li><h3>Zones stay independent</h3><p>A wash change must never disturb the podium or the other room.</p></li>
+        <li><h3>Blackouts always fully recover</h3><p>From any state, kill and restore must return a usable room.</p></li>
+        <li><h3>Black is the resting state</h3><p>No effect may lift the black level of the wall.</p></li>
+        <li><h3>Phases are exclusive</h3><p>Never two live at once. Never zero after a press.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------ handover -->
+  <section class="band band--end" id="handover" aria-labelledby="h-handover">
+    <div class="wrap wrap--narrow">
+      <h2 id="h-handover">Handed over, not just installed</h2>
+      <p class="big">
+        The build shipped with a written technical reference: signal flow, the
+        authoritative MIDI map, the Companion structure, and the conventions any
+        future scene has to follow.
+      </p>
+      <p>
+        A show control system that only its builder understands is a liability. The
+        documentation is the part that makes it an asset — it is what lets someone
+        else add a lighting scene in a year without quietly breaking the blackouts.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="pagefoot">
+  <div class="wrap">
+    <p class="pagefoot__mark">REVd</p>
+    <p>Show control system design, integration and documentation.</p>
+    <p class="pagefoot__note">Case study · <time datetime="2026-08">August 2026</time></p>
+  </div>
+</footer>
+
+<dialog id="lightbox" class="lightbox" closedby="any" aria-label="Enlarged image">
+  <form method="dialog">
+    <button class="lightbox__close" value="close">
+      <span class="visually-hidden">Close</span>
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </form>
+  <img id="lightbox-img" src="" alt="">
+  <p id="lightbox-cap" class="lightbox__cap"></p>
+</dialog>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>
