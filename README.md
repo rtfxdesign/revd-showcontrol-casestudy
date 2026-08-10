@@ -1,10 +1,21 @@
 # REVd Cycling — Show Control System (case study)
 
+> ## ⚠️ Archived — superseded
+>
+> This case study now lives inside the RT/FX portfolio and is served from there:
+>
+> - **Live:** https://rtfx.space/revd-show-control/
+> - **Source:** [`rtfxdesign/rtfx-portfolio`](https://github.com/rtfxdesign/rtfx-portfolio) → `public/revd-show-control/`
+>
+> Keeping two copies caused real drift — the published version fell behind this
+> one and the instructor guide 404'd for a day. Edit the portfolio copy instead.
+> This repo is kept read-only for history.
+
 Public-facing portfolio version of the REVd project. Same system as the
 internal technical reference, told as a case study: what the problem was, what
 got built, and why the decisions were made that way.
 
-Live: https://revd-showcontrol.netlify.app
+Live: https://rtfx.space/revd-show-control/ (was: revd-showcontrol.netlify.app)
 
 ## Stack
 
